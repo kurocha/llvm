@@ -27,8 +27,9 @@ define_target "llvm" do |target|
 	target.depends :platform
 	target.depends "Language/C++11"
 	
-	target.provides "Library/llvm" do
-		append linkflags ["-lllvm"]
+	target.provides "Library/llvm-engine" do
+		# llvm-config --libs engine
+		append linkflags %W{-lLLVMX86Disassembler -lLLVMX86AsmParser -lLLVMX86CodeGen -lLLVMSelectionDAG -lLLVMAsmPrinter -lLLVMMCParser -lLLVMX86Desc -lLLVMX86Info -lLLVMX86AsmPrinter -lLLVMX86Utils -lLLVMJIT -lLLVMRuntimeDyld -lLLVMExecutionEngine -lLLVMCodeGen -lLLVMObjCARCOpts -lLLVMScalarOpts -lLLVMInstCombine -lLLVMTransformUtils -lLLVMipa -lLLVMAnalysis -lLLVMTarget -lLLVMMC -lLLVMObject -lLLVMCore -lLLVMSupport}
 	end
 end
 
