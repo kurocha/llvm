@@ -10,17 +10,22 @@ define_target "llvm" do |target|
 		build_external(package.path, "llvm-3.3", environment) do |config, fresh|
 			python_path = `which python2.7`.chomp
 			
-			Commands.run("./configure",
-				"--prefix=#{config.install_prefix}",
-				"--disable-dependency-tracking",
-				"--enable-shared=no",
-				"--enable-static=yes",
-				"--with-python=#{python_path}",
-				*config.configure
-			) if fresh
+			FileUtils.mkdir("build")
 			
-			Commands.make
-			Commands.make_install
+			FileUtils.chdir("build") do
+				Commands.run("cmake", "-G", "Unix Makefiles",
+					"-DCMAKE_INSTALL_PREFIX:PATH=#{config.install_prefix}",
+					"-DCMAKE_PREFIX_PATH=#{config.install_prefix}",
+					"-DCMAKE_CXX_COMPILER_WORKS=TRUE",
+					"-DCMAKE_C_COMPILER_WORKS=TRUE",
+					"-DBUILD_SHARED_LIBS=OFF",
+					"-DPYTHON_EXECUTABLE=#{python_path}",
+					"../"
+				) if fresh
+			
+				Commands.make
+				Commands.make_install
+			end
 		end
 	end
 	
@@ -33,8 +38,14 @@ define_target "llvm" do |target|
 	end
 end
 
-define_configuration "llvm" do |configuration|
+define_configuration "local" do |configuration|
 	configuration[:source] = "https://github.com/dream-framework/"
+	
+	configuration.import "llvm"
+end
+
+define_configuration "llvm" do |configuration|
+	configuration.public!
 	
 	configuration.require "platforms"
 end
