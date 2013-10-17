@@ -36,5 +36,5 @@ end
 define_configuration "llvm" do |configuration|
 	configuration[:source] = "https://github.com/dream-framework/"
 	
-	configuration.import! "platforms"
+	configuration.require "platforms"
 end
