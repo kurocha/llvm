@@ -7,8 +7,8 @@ teapot_version "1.0.0"
 
 define_target "llvm" do |target|
 	target.build do
-		source_files = Files::Directory.join(target.package.path, 'llvm-3.3')
-		cache_prefix = Files::Directory.join(environment[:build_prefix], "llvm-3.3-#{environment.checksum}")
+		source_files = Files::Directory.join(target.package.path, 'llvm')
+		cache_prefix = Files::Directory.join(environment[:build_prefix], "llvm-#{environment.checksum}")
 		package_files = Path.join(environment[:install_prefix], "share/llvm/cmake/LLVMConfig.cmake")
 		
 		python_path = `which python2.7`.chomp
@@ -36,7 +36,7 @@ define_target "llvm" do |target|
 end
 
 define_configuration "local" do |configuration|
-	configuration[:source] = "https://github.com/dream-framework/"
+	configuration[:source] = "https://github.com/kurocha/"
 	
 	configuration.import "llvm"
 end
