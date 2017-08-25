@@ -39,9 +39,6 @@ define_configuration "local" do |configuration|
 	configuration[:source] = "https://github.com/kurocha/"
 	
 	configuration.import "llvm"
-	
-	configuration.require "generate-project"
-	configuration.require "generate-travis"
 end
 
 define_configuration "llvm" do |configuration|
