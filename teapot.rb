@@ -7,9 +7,9 @@ teapot_version "1.0.0"
 
 define_target "llvm" do |target|
 	target.build do
-		source_files = Files::Directory.join(target.package.path, 'llvm')
-		cache_prefix = Files::Directory.join(environment[:build_prefix], "llvm-#{environment.checksum}")
-		package_files = Path.join(environment[:install_prefix], "share/llvm/cmake/LLVMConfig.cmake")
+		source_files = target.package.path / "llvm"
+		cache_prefix = environment[:build_prefix] / environment.checksum + "llvm"
+		package_files = environment[:install_prefix] / "share/llvm/cmake/LLVMConfig.cmake"
 		
 		python_path = `which python2.7`.chomp
 		
@@ -24,7 +24,7 @@ define_target "llvm" do |target|
 	end
 	
 	target.depends :platform
-	target.depends "Language/C++11"
+	target.depends "Language/C++14", private: true
 	
 	target.depends "Build/Make"
 	target.depends "Build/CMake"
@@ -39,6 +39,9 @@ define_configuration "local" do |configuration|
 	configuration[:source] = "https://github.com/kurocha/"
 	
 	configuration.import "llvm"
+	
+	configuration.require "generate-project"
+	configuration.require "generate-travis"
 end
 
 define_configuration "llvm" do |configuration|
